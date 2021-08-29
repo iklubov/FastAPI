@@ -23,12 +23,14 @@ def get_db():
     finally:
         db.close()
 
-def create_item(db, id, columns, row):
-    item_data = {c:r for c,r in zip(columns, row)}
-    item_data['id'] = id
+
+def create_item(uid, columns, row):
+    item_data = {c: r for c, r in zip(columns, row)}
+    item_data['id'] = uid
     item = ItemModel(**item_data)
     db_item = Item(**item.dict())
     return db_item
+
 
 def parse_csv():
     columns = []
@@ -42,16 +44,17 @@ def parse_csv():
                 rows.append(row[0].split(','))
     return columns, rows
 
+
 def fill_database():
     columns, rows = parse_csv()
-    id = 0
+    uid = 0
     db: Session = get_db()
     # NOT PRODUCTION DECISION
     db.query(Item).delete()
     for row in rows:
-        db_item = create_item(db, id, columns, row)
+        db_item = create_item(uid, columns, row)
         db.add(db_item)
-        id += 1
+        uid += 1
     db.commit()
     db.close()
 

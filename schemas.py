@@ -11,7 +11,8 @@ sqlFunctions = func.sum, func.avg
 sqlFunctionNames = [f._FunctionGenerator__names[0] for f in sqlFunctions]
 
 arithmeticOperators = operators.div,
-relationOperators = operators.lt, operators.le, operators.gt, operators.ge, operators.ne, operators.eq, operators.between_op
+relationOperators = operators.lt, operators.le, operators.gt, operators.ge, operators.ne, operators.eq, \
+                    operators.between_op
 validOperatorDict = {op.__name__: op for op in arithmeticOperators + relationOperators}
 
 arithmeticAttributes = 'truediv',
@@ -38,11 +39,12 @@ class ColumnModel(BaseModel):
     @validator('name')
     def name_valid(cls, v):
         if getattr(database.Item, v, None) is None:
-             raise ValueError('column %s is not valid column name' % v)
+            raise ValueError('column %s is not valid column name' % v)
         return v
 
     def getQuery(self):
         return getattr(database.Item, self.name)
+
 
 class ColumnFunctionModel(ColumnModel):
     function: str
@@ -57,13 +59,14 @@ class ColumnFunctionModel(ColumnModel):
     def getQuery(self):
         return getattr(func, self.function)(getattr(database.Item, self.name)).label(self.label)
 
+
 class MultipleColumnsFunctionModel(BaseModel):
     columnFunctions: List[ColumnFunctionModel]
     operator: str
     label: str
 
     @validator('operator')
-    def value_valid(cls, v, values):
+    def operator_valid(cls, v):
         if v != "" and v not in arithmeticAttributes:
             raise ValueError('function name %s is not valid operator' % v)
         return v
@@ -98,13 +101,8 @@ class FilterModel(ColumnModel):
         return validOperatorDict[self.relation](label, *value)
 
 
-class GroupModel(ColumnModel):
-
-    def getQuery(self):
-        return getattr(database.Item, self.name)
-
 class OrderModel(BaseModel):
-    name :str = ''
+    name: str = ''
     desc: bool = False
     label: str = ''
 
@@ -119,17 +117,18 @@ class OrderModel(BaseModel):
         bothFilled = 'name' in values and values['name'] and v
         noneFilled = not v and ('name' not in values or not values['name'])
         if bothFilled or noneFilled:
-            raise ValueError('you shoud fill either name or label')
+            raise ValueError('you should fill either name or label')
         return v
 
     def getQuery(self):
         label = getattr(database.Item, self.name) if self.name else self.label
         return label if not self.desc else desc(label)
 
+
 class QueryModel(BaseModel):
     columns: List[Union[ColumnFunctionModel, ColumnModel, MultipleColumnsFunctionModel]] = []
     filters: List[FilterModel] = []
-    groups: List[GroupModel] = []
+    groups: List[ColumnModel] = []
     orders: List[OrderModel] = []
 
     def getQuery(self):
@@ -137,5 +136,3 @@ class QueryModel(BaseModel):
             [f.getQuery() for f in self.filters], \
             [g.getQuery() for g in self.groups], \
             [o.getQuery() for o in self.orders]
-
-

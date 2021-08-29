@@ -170,7 +170,7 @@ FULL_TABLE_QUERY = {
 
 JUNE_01_2017 = {
     "summary": "01 June 2017",
-    "description": "SELECT * FROM table",
+    "description": "SELECT * FROM table 01 June 2017",
     "value": {
         "filters": [
             {

@@ -12,6 +12,7 @@ app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
+
 @app.post("/query/")
 def read_columns(
         query: QueryModel = Body(
@@ -34,5 +35,6 @@ def read_columns(
         result = 'No result due to error'
     db.close()
     return result
+
 
 fill_database()
