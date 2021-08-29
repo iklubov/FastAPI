@@ -12,12 +12,6 @@ app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
-# todos
-# mix id into model
-# what the fuck is Depends
-# check for database consistency
-# url for localhost - in settings
-
 @app.post("/query/")
 def read_columns(
         query: QueryModel = Body(

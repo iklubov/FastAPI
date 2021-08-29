@@ -1,19 +1,87 @@
+##Introduction
 This application creates database from csv file and provides access to the database using POST request
-The application based on FastAPI framework. Requests from the task are in examples.py
+The application based on [FastAPI](https://fastapi.tiangolo.com) framework which use [SQLAlchemy](https://www.sqlalchemy.org/)
+framework with it's Python database wrapper. I used SQLLite database here.
 
-I used local server for test. Url is # todo
+##Usage
+Install all packets from requirements.txt. Then [run fastapi](https://fastapi.tiangolo.com/#run-it).
+You can find examples of all queries from the task in examples.py. Also you can find them on http://127.0.0.1:8000/docs, where all of them are presented. 
+##Request body structure
 
-Request suppports SELECT, WHERE, GROUP_BY, ORDER_BY
+Request body is json like this:
+````json
+{
+  "columns": [...], SELECT
+  "filters": [...], WHERE
+  "groups": [...],  GROUP_BY
+  "orders": [...],  ORDER_BY
+}
+````
+###SELECT - "columns" json part
+````json
+{  
+  "name": "channel"
+}
+````
+is "SELECT channel FROM table"
+````json
+{
+  "name": "impressions",
+  "function": "sum",
+  "label": "impressions",
+}
+````
+is "SELECT SUM(impressions) FROM table AS impressions"
+````json
+[
+  {
+    "columnFunctions": [
+      {
+        "name": "clicks",
+        "function": "avg",
+        "label": "clicks",
+      },
+      {
+        "name": "installs",
+        "function": "avg",
+        "label": "installs",
+      },
+    ],
+    "operator": "truediv",
+    "label": "CPI",
+  },
+]
+````
+is "SELECT (AVG(clicks) AS clicks) / AVG(installs) AS installs) FROM table AS CPI"
 
-Request body is json with optional fields: 
-    'columns' = field OR field label OR fields (SELECT PART)
-    'filters' = conditions for column values (WHERE PART)
-    'groups' = columns to group (GROUP_BY part)
-    'orders' == order of columns (ORDER_BY part)
+Functions SUM and AVG are supported and div operation is also supported
 
-validation is executed using Pydantic models
+###WHERE = "filters" json part
+````json
+{
+  "name": "date",
+  "relation": "eq",
+  "value": "2017-06-01"
+}
+````
+is "WHERE date == '2017-06-01'"
 
-request body is something like
-##### EXAMPLE FROM CODE
+relations supported = "lt", "le", "ge", "gt", "eq", "ne", "between_op"
 
-you may use http://127.0.0.1:8000/docs for testing 
+###GROUP_BY = "groups" json part
+````json
+{
+"name": "date"
+}
+````
+is "GROUP_BY(date)"
+
+###ORDER_BY - "orders"
+````json
+{
+    "name": "date",
+    "desc": false,
+    "label": "",
+}
+````
+is ORDER_BY(date)

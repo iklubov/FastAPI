@@ -51,7 +51,7 @@ def fill_database():
     for row in rows:
         db_item = create_item(db, id, columns, row)
         db.add(db_item)
-        id+=1
+        id += 1
     db.commit()
     db.close()
 
