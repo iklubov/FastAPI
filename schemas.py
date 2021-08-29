@@ -127,13 +127,13 @@ class OrderModel(BaseModel):
         return label if not self.desc else desc(label)
 
 class QueryModel(BaseModel):
-    columns: List[Union[ColumnFunctionModel, ColumnModel, MultipleColumnsFunctionModel]]
-    filters: List[FilterModel]
-    groups: List[GroupModel]
-    orders: List[OrderModel]
+    columns: List[Union[ColumnFunctionModel, ColumnModel, MultipleColumnsFunctionModel]] = []
+    filters: List[FilterModel] = []
+    groups: List[GroupModel] = []
+    orders: List[OrderModel] = []
 
     def getQuery(self):
-        return [c.getQuery() for c in self.columns], \
+        return [c.getQuery() for c in self.columns] if self.columns else database.Item.__table__.columns, \
             [f.getQuery() for f in self.filters], \
             [g.getQuery() for g in self.groups], \
             [o.getQuery() for o in self.orders]

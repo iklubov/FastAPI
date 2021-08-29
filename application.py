@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from database import engine, get_db, fill_database, Base
 from examples import IMPRESSIONS_CLICKS_BEFORE01062017, INSTALLS_OS_MAY2017, REVENUE_01062017_US, \
-    CPI_SPEND_CANADA
+    CPI_SPEND_CANADA, FULL_TABLE_QUERY, JUNE_01_2017
 from schemas import QueryModel
 
 app = FastAPI()
@@ -20,7 +20,9 @@ def read_columns(
                 "impressions_clicks_before01062017": IMPRESSIONS_CLICKS_BEFORE01062017,
                 "installs_os_may2017": INSTALLS_OS_MAY2017,
                 "revenue_01062017_us": REVENUE_01062017_US,
-                "cpi_spend_canada": CPI_SPEND_CANADA
+                "cpi_spend_canada": CPI_SPEND_CANADA,
+                "full_table_query": FULL_TABLE_QUERY,
+                "june_01_2017": JUNE_01_2017,
                 },
             ),
         ):

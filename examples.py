@@ -161,3 +161,23 @@ CPI_SPEND_CANADA = {
         ],
     }
 }
+
+FULL_TABLE_QUERY = {
+    "summary": "all table query",
+    "description": "SELECT * FROM table",
+    "value": {},
+}
+
+JUNE_01_2017 = {
+    "summary": "01 June 2017",
+    "description": "SELECT * FROM table",
+    "value": {
+        "filters": [
+            {
+                "name": "date",
+                "relation": "eq",
+                "value": '2017-06-01',
+            },
+        ],
+    },
+}
