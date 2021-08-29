@@ -22,6 +22,7 @@ models.Base.metadata.create_all(bind=engine)
 # mix id into model
 # what the fuck is Depends
 # check for database consistency
+# url for localhost - in settings
 
 
 def create_item(db, id, columns, row):
