@@ -1,14 +1,14 @@
-##Introduction
+## Introduction
 
 This application creates database from csv file and provides access to the database using POST request
 The application based on [FastAPI](https://fastapi.tiangolo.com) framework which use [SQLAlchemy](https://www.sqlalchemy.org/)
 framework with it's Python database wrapper. I used SQLLite database here.
 
-##Usage
+## Usage
 
 Install all packets from requirements.txt. Then [run fastapi](https://fastapi.tiangolo.com/#run-it).
 You can find examples of all queries from the task in examples.py. Also you can find them on http://127.0.0.1:8000/docs, where all of them are presented. 
-##Request body structure
+## Request body structure
 
 Request body is json like this:
 ````json
@@ -19,7 +19,7 @@ Request body is json like this:
   "orders": [...],  ORDER_BY
 }
 ````
-###SELECT - "columns" json part
+### SELECT - "columns" json part
 
 ````json
 {  
@@ -59,7 +59,7 @@ is "SELECT (AVG(clicks) AS clicks) / AVG(installs) AS installs) FROM table AS CP
 
 Functions SUM and AVG are supported and div operation is also supported
 
-###WHERE = "filters" json part
+### WHERE = "filters" json part
 
 ````json
 {
@@ -72,7 +72,7 @@ is "WHERE date == '2017-06-01'"
 
 relations supported = "lt", "le", "ge", "gt", "eq", "ne", "between_op"
 
-###GROUP_BY = "groups" json part
+### GROUP_BY = "groups" json part
 
 ````json
 {
@@ -81,7 +81,7 @@ relations supported = "lt", "le", "ge", "gt", "eq", "ne", "between_op"
 ````
 is "GROUP_BY(date)"
 
-###ORDER_BY - "orders"
+### ORDER_BY - "orders"
 
 ````json
 {
